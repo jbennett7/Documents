@@ -1,4 +1,5 @@
 from scanner import Scanner
+#from PIL import Image
 import unittest
 
 class TestScanner(unittest.TestCase):
@@ -10,19 +11,31 @@ class TestScanner(unittest.TestCase):
     def test_get_device_parameters(self):
         print(f'Testing Device parameters: {self.scanner.get_device_parameters()}')
 
-    def test_get_options(self):
-        options = self.scanner.get_options()
-        print('Testing Device Options:')
-        for option in options[0:5]:
-            print(f'\t{option}')
+#    def test_get_options(self):
+#        options = self.scanner.get_options()
+#        print('Testing Device Options:')
+#        for option in options[0:5]:
+#            print(f'\t{option}')
 
+    def test_get_modes(self):
+        print(f'Device modes: {self.scanner.get_modes()}')
+
+    def test_set_mode(self):
+        self.scanner.set_mode('Color')
+        print(f'Device Mode: {self.scanner.get_current_mode()}')
+
+    @unittest.skip('none')
     def test_single_page_scan(self):
         input("Please Place a test page in the tray and then press enter to continue...")
-        self.scanner.single_page_scan()
+        im = self.scanner.single_page_scan()
+        im.save('/tmp/single_test.png')
 
+    @unittest.skip('none')
     def test_multi_page_scan(self):
         input("Place multiple pages in the tray and press enter to continue...")
-        self.scanner.multi_page_scan()
+        images = self.scanner.multi_page_scan()
+        for i,image in enumerate(images):
+            image.save('/tmp/multi_test-'+str(i)+'.png')
 
 if __name__ == '__main__':
     unittest.main()

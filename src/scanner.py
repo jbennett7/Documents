@@ -1,8 +1,12 @@
 import sane
 import numpy
 from PIL import Image
+from enum import Enum
 
 class NoDeviceFoundError(Exception):
+    pass
+
+class ModeError(Exception):
     pass
 
 class Scanner(object):
@@ -24,18 +28,33 @@ class Scanner(object):
         self.__params = self.__dev.get_parameters()
         return self.__params
 
-    def get_options(self) -> list[tuple[int, str, str, str, str, bytes, str, str]]:
-        """SANE Device Options:
-        (id: int, name: str, title: str,
-         desc: str, unit: str, size: bytes, cap: str, constraint: str)"""
-        self.__device_options = {}
-        options = self.__dev.get_options()
-        return(options)
+#    def get_options(self) -> list[tuple[int, str, str, str, str, bytes, str, str]]:
+#        """get_options() -> list[tuple[int, str, str, str, str, bytes, str, str]]
+#
+#        SANE Device Options:
+#        (id: int, name: str, title: str, desc: str, unit: str,
+#         size: bytes, cap: str, constraint: str)"""
+#        self.__device_options = {}
+#        options = self.__dev.get_options()
+#        return(options)
+
+    def get_modes(self) -> list[str]:
+        """get_modes() -> list[str]"""
+        return self.__dev['mode'].constraint
+
+    def set_mode(self, new_mode: str) -> None:
+        """set_mode() -> bool"""
+        if new_mode not in self.get_modes():
+            raise ModeError
+        self.__dev.mode = new_mode
+
+    def get_current_mode(self) -> str:
+        """get_current_mode() -> str"""
+        return self.__dev.mode
 
     def single_page_scan(self) -> Image:
         """single_page_scan() -> Image"""
-        self.__dev.start()
-        im = self.__dev.snap()
+        im = self.__dev.scan()
         return im
 
     def multi_page_scan(self) -> list[Image]:
