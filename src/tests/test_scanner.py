@@ -3,7 +3,7 @@ import unittest
 
 class TestScanner(unittest.TestCase):
 
-    def test_get_device(self):
+    def test_open_device(self):
         scanner = Scanner()
 
 if __name__ == '__main__':
