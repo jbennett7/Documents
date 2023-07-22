@@ -1,4 +1,4 @@
-from scanner import Scanner
+from scanner import Scanner, Page
 #from PIL import Image
 import unittest
 
@@ -30,23 +30,37 @@ class TestScanner(unittest.TestCase):
         input('DUPLEX SOURCE TEST: ' +
               'Place multiple pages in the tray and press enter to continue...')
         images = self.scanner.multi_page_scan()
-        for i, image in enumerate(images):
-            image.save('/tmp/duplex_test-'+str(i)+'.png')
+        for image in images:
+            image.show()
+
+    @unittest.skip('Skipping because nothing changed')
+    def test_legal_scan(self):
+        input('Testing LEGAL scan, place a page in the tray...')
+        self.scanner.set_page(Page.LEGAL)
+        im = self.scanner.single_page_scan()
+        im.show()
+
+    @unittest.skip('Skipping because nothing changed')
+    def test_letter_scan(self):
+        input('Testing LETTER scan, place a page in the tray...')
+        self.scanner.set_page(Page.LETTER)
+        im = self.scanner.single_page_scan()
+        im.show()
 
     @unittest.skip('Skipping because nothing changed')
     def test_single_page_scan(self):
         input('SINGLE PAGE SCAN TEST: place a page in the tray. Press Enter to continue...')
         self.scanner.set_mode('Color')
         im = self.scanner.single_page_scan()
-        im.save('/tmp/single_test.png')
+        im.show()
 
     @unittest.skip('Skipping because nothing changed')
     def test_multi_page_scan(self):
         input('MULTIPLE PAGE SCAN TEST: ' +
               'Place multiple pages in the tray and press enter to continue...')
         images = self.scanner.multi_page_scan()
-        for i,image in enumerate(images):
-            image.save('/tmp/multi_test-'+str(i)+'.png')
+        for image in images:
+            image.show()
 
 if __name__ == '__main__':
     unittest.main()
