@@ -51,9 +51,9 @@ if multi:
         file_names.append(file_name)
         image.save(documents_path+'/'+file_name)
 else:
-    file_name = str(uuid4)+'.png'
+    file_name = str(uuid4())+'.png'
     file_names.append(file_name)
-    image.save(documents_path+'/'+file_name)
+    images.save(documents_path+'/'+file_name)
 
 document = {'files': file_names, 'labels': labels, 'created': created}
 db = TinyDB(database_path)
