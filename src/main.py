@@ -1,10 +1,8 @@
 from scanner import Scanner
 from uuid import uuid4
 from tinydb import TinyDB, Query
+from config import documents_path, database_path
 import datetime
-
-documents_path = '/run/media/jbennett/Joe/Documents'
-database_path = '/run/media/jbennett/Joe/Documents/documents.json'
 
 input("Make sure the scanner is on and paper is in the feed...")
 scanner = Scanner()
