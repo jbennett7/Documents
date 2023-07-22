@@ -9,6 +9,9 @@ class NoDeviceFoundError(Exception):
 class ModeError(Exception):
     pass
 
+class SourceError(Exception):
+    pass
+
 class Scanner(object):
     def __init__(self):
         self.sane_version = sane.init()
@@ -28,15 +31,19 @@ class Scanner(object):
         self.__params = self.__dev.get_parameters()
         return self.__params
 
-#    def get_options(self) -> list[tuple[int, str, str, str, str, bytes, str, str]]:
-#        """get_options() -> list[tuple[int, str, str, str, str, bytes, str, str]]
-#
-#        SANE Device Options:
-#        (id: int, name: str, title: str, desc: str, unit: str,
-#         size: bytes, cap: str, constraint: str)"""
-#        self.__device_options = {}
-#        options = self.__dev.get_options()
-#        return(options)
+    def get_sources(self) -> list[str]:
+        """get_sources() -> list[str]"""
+        return self.__dev['source'].constraint
+
+    def set_source(self, new_source: str) -> None:
+        """set_source(new_source: str) -> None"""
+        if new_source not in self.get_sources():
+            raise SourceError
+        self.__dev.source = new_source
+
+    def get_current_source(self) -> str:
+        """get_current_source -> str"""
+        return self.__dev.source
 
     def get_modes(self) -> list[str]:
         """get_modes() -> list[str]"""
