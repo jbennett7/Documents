@@ -12,6 +12,10 @@ class ModeError(Exception):
 class SourceError(Exception):
     pass
 
+class Page(Enum):
+    LEGAL = 355
+    LETTER = 280
+
 class Scanner(object):
     def __init__(self):
         self.sane_version = sane.init()
@@ -54,6 +58,10 @@ class Scanner(object):
         if new_mode not in self.get_modes():
             raise ModeError
         self.__dev.mode = new_mode
+
+    def set_page(self, page_size: Page) -> str:
+        """set_page_legal(self) -> str"""
+        self.__dev.page_height = page_size.value
 
     def get_current_mode(self) -> str:
         """get_current_mode() -> str"""

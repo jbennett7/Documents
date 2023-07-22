@@ -1,4 +1,4 @@
-from scanner import Scanner
+from scanner import Scanner, Page
 from uuid import uuid4
 from tinydb import TinyDB, Query
 from config import documents_path, database_path
@@ -28,14 +28,22 @@ while selected_source not in sc_sources:
 scanner.set_source(selected_source)
 print(scanner.get_current_source())
 
+page_height = input(f'Page size is "letter" or "legal": ')
+if page_height == 'legal':
+    scanner.set_page(Page.LEGAL)
+else:
+    scanner.set_page(Page.LETTER)
+
 multi = input('Scanning more than one (y/n)? ')
 images = None
 if multi == 'y':
     multi = True
     images = scanner.multi_page_scan()
+    images[0].show()
 else:
     multi = False
     images = scanner.single_page_scan()
+    images.show()
 
 linput = input("What labels do you want to add (separate with a comma): ")
 labels = linput.split(', ')
