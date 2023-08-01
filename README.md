@@ -1,1 +1,1 @@
-Documents scanner
+Documents scanner and database.
