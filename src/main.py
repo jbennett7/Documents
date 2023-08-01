@@ -1,6 +1,6 @@
 from scanner import Scanner, Page
 from uuid import uuid4
-from tinydb import TinyDB, Query
+from database import Documents
 from config import documents_path, database_path
 import datetime
 
@@ -48,8 +48,6 @@ else:
 linput = input("What labels do you want to add (separate with a comma): ")
 labels = linput.split(', ')
 
-created = str(datetime.datetime.now())
-
 file_names = []
 if multi:
     for image in images:
@@ -61,6 +59,8 @@ else:
     file_names.append(file_name)
     images.save(documents_path+'/'+file_name)
 
+created = str(datetime.datetime.now())
+
 document = {'files': file_names, 'labels': labels, 'created': created}
-db = TinyDB(database_path)
+db = Documents(database_path)
 db.insert(document)
