@@ -1,5 +1,5 @@
 from tinydb import Query
-from database import Documents
+from documents import Documents
 import os
 import unittest
 
@@ -34,7 +34,7 @@ dummys = [
      'labels': ['follow', 'sheep'],
      'created': '2023-07-22 15:31:09.010078'}]
 
-class TestDatabase(unittest.TestCase):
+class TestDocuments(unittest.TestCase):
 
     def setUp(self):
         self.database = Documents(db_path)
@@ -43,6 +43,19 @@ class TestDatabase(unittest.TestCase):
 
     def test_database(self):
            self.assertEqual(len(self.database._.all()), len(dummys)) 
+
+    def test_insert(self):
+        new_entry = {'files': ['uieid.png'],
+                     'labels': ['wanda', 'jen', 'james'],
+                     'created': '2023-08-01 23:08:20.092342'}
+        self.database.insert(new_entry)
+        verify = self.database.get_document('2023-08-01 23:08:20.092342')
+        self.assertEqual(new_entry, verify[0])
+
+    def test_get(self):
+        item = dummys[3]
+        verify = self.database.get_document(item['created'])
+        self.assertEqual(item,verify[0])
 
     def test_search_labels(self):
         results = self.database.search_labels('dad')
