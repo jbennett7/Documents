@@ -1,6 +1,6 @@
 from scanner import Scanner, Page
 from uuid import uuid4
-from database import Documents
+from documents import Documents
 from config import documents_path, database_path
 import datetime
 
@@ -48,19 +48,26 @@ else:
 linput = input("What labels do you want to add (separate with a comma): ")
 labels = linput.split(', ')
 
+created = str(datetime.datetime.now())
 file_names = []
 if multi:
     for image in images:
         file_name = str(uuid4())+'.png'
         file_names.append(file_name)
-        image.save(documents_path+'/'+file_name)
+        try:
+            image.save(documents_path+'/'+file_name)
+        except Exception:
+            for file in file_names:
+                os.remove(documents_path+'/'+file)
 else:
     file_name = str(uuid4())+'.png'
     file_names.append(file_name)
     images.save(documents_path+'/'+file_name)
-
-created = str(datetime.datetime.now())
-
-document = {'files': file_names, 'labels': labels, 'created': created}
-db = Documents(database_path)
-db.insert(document)
+try:
+    document = {'files': file_names, 'labels': labels, 'created': created}
+    db = Documents(database_path)
+    db.insert(document)
+except Exception:
+    for file in file_names:
+        os.remove(documents_path+'/'+file)
+        raise DatabaseException()
