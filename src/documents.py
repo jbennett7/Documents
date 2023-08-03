@@ -15,6 +15,11 @@ class Documents(object):
                  if [label for label in item['labels']
                      if query.search(label)]]
 
+    def pretty_print_search(self,regex):
+        for j in [(i['labels'], i['created'])
+                  for i in self.search_labels(regex)]:
+            print(j)
+
     def update_labels(self, created, labels):
         Item = Query()
         self._.update({'labels': labels}, Item.created == created)
