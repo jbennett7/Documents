@@ -1,8 +1,9 @@
-from scanner import Scanner, Page
 from uuid import uuid4
-from documents import Documents
-from config import documents_path, database_path
 import datetime
+
+from scanner.scanner import Scanner, Page
+from config.config import documents_path, database_path
+from documents.documents import Documents
 
 input("Make sure the scanner is on and paper is in the feed...")
 scanner = Scanner()
@@ -55,19 +56,19 @@ if multi:
         file_name = str(uuid4())+'.png'
         file_names.append(file_name)
         try:
-            image.save(documents_path+'/'+file_name)
+            image.save(documents_path + file_name)
         except Exception:
             for file in file_names:
-                os.remove(documents_path+'/'+file)
+                os.remove(documents_path + file)
 else:
     file_name = str(uuid4())+'.png'
     file_names.append(file_name)
-    images.save(documents_path+'/'+file_name)
+    images.save(documents_path + file_name)
 try:
     document = {'files': file_names, 'labels': labels, 'created': created}
     db = Documents(database_path)
     db.insert(document)
 except Exception:
     for file in file_names:
-        os.remove(documents_path+'/'+file)
+        os.remove(documents_path + file)
         raise DatabaseException()
